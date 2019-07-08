@@ -1,21 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController1 : MonoBehaviour {
 
     public float speed;
     public Text countText;
     public Text winText;
 
+    public Text scoreText;
+
     private Rigidbody rb;
     private int count;
+    private int score;
 
     void Start ()
     {
         rb = GetComponent<Rigidbody>();
         count = 0;
+        score = 0;
         SetCountText ();
+        SetScoreText ();
         winText.text = "";
     }
 
@@ -38,17 +44,38 @@ public class PlayerController : MonoBehaviour {
         if (other.gameObject.CompareTag ( "Pick Up"))
         {
             other.gameObject.SetActive (false);
-            count = count + 1;
+            count = count +1;
             SetCountText ();
+        }
+
+          if (other.gameObject.CompareTag ( "Pick Up"))
+        {
+            other.gameObject.SetActive (false);
+            score = score +5;
+            SetScoreText ();
+        }
+
+        if (other.gameObject.CompareTag ( "Pick Bad"))
+        {
+            other.gameObject.SetActive (false);
+            score = score -5;
+            SetScoreText ();
         }
     }
 
     void SetCountText ()
     {
-        countText.text = "Score: " + count.ToString ();
-        if (count >= 10)
+        countText.text = "Count: " + count.ToString ();
+        if (count >= 6)
         {
             winText.text = "You Win!";
-        }
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(currentSceneIndex + 1);
+         }
+    }
+
+    void SetScoreText ()
+    {
+        scoreText.text = "Score: " + score.ToString ();
     }
 }
